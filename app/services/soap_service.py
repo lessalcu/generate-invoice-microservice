@@ -63,13 +63,12 @@ def generar_factura(reserva_id):
 
     # Crear la factura
     factura = Invoice(
-        reserva_id=reserva_id,
-        monto_total=reserva["totalAmount"],
-        fecha=datetime.utcnow()
-        
-        reserva=reserva,  # Guardar toda la información de la reserva
-        usuario=usuario   # Guardar toda la información del usuario
-    )
+    reserva_id=reserva_id,
+    monto_total=reserva["totalAmount"],
+    fecha=datetime.utcnow(),
+    reserva=reserva,  # Guardar toda la información de la reserva
+    usuario=usuario   # Guardar toda la información del usuario
+)
     
     # Guardar en MongoDB
     collection = get_mongo_client()
