@@ -1,8 +1,8 @@
 from datetime import datetime
 from app.database.mongo_connection import get_mongo_client
 from app.models.invoice import Invoice
-from services.user_service import consultar_usuario
-from services.reservation_service import consultar_reserva
+from app.services.user_service import consultar_usuario
+from app.services.reservation_service import consultar_reserva
 
 def generar_factura(reserva_id):
     """Genera una factura basada en la reserva y el usuario relacionado."""
