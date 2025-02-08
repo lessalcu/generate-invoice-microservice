@@ -1,5 +1,5 @@
 # Base image
-FROM python:3.10-slim
+FROM python:3.9
 
 # Set working directory
 WORKDIR /app
@@ -11,7 +11,7 @@ COPY . /app
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Expose port
-EXPOSE 5000
+EXPOSE 5005
 
 # Run the application
-CMD ["python", "app.py"]
+CMD ["python", "-m", "app"]
