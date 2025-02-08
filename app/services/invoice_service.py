@@ -1,34 +1,34 @@
 from datetime import datetime, timezone
 from app.database.mongo_connection import get_mongo_client
 from app.models.invoice import Invoice
-from app.services.user_service import consultar_usuario
-from app.services.reservation_service import consultar_reserva
-from bson import ObjectId  # Importar para manejar ObjectId
+from app.services.user_service import get_user
+from app.services.reservation_service import get_reservation
+from bson import ObjectId  # Import to handle ObjectId
 
-def generar_factura(reserva_id):
-    """Genera una factura basada en la reserva y el usuario relacionado."""
+def generate_invoice(reservation_id):
+    """Generates an invoice based on the reservation and related user."""
     
-    reserva = consultar_reserva(reserva_id)
-    print("Respuesta de la reserva:", reserva)  
+    reservation = get_reservation(reservation_id)
+    print("Reservation response:", reservation)  
     
-    if "userId" not in reserva:
-        raise Exception(f"La reserva no contiene el campo 'userId': {reserva}")
+    if "userId" not in reservation:
+        raise Exception(f"Reservation does not contain 'userId' field: {reservation}")
     
-    usuario = consultar_usuario(reserva["userId"])
+    user = get_user(reservation["userId"])
 
-    # Crear el documento de la factura incluyendo reserva y usuario
-    factura_data = {
-        "reserva_id": reserva_id,
-        "monto_total": reserva["totalAmount"],
-        "fecha": datetime.now(timezone.utc),
-        "reserva": reserva,
-        "usuario": usuario
+    # Create the invoice document including reservation and user
+    invoice_data = {
+        "reservation_id": reservation_id,
+        "total_amount": reservation["totalAmount"],
+        "date": datetime.now(timezone.utc),
+        "reservation": reservation,
+        "user": user
     }
 
     collection = get_mongo_client()
-    factura_id = collection.insert_one(factura_data).inserted_id  # Guardar en MongoDB
+    invoice_id = collection.insert_one(invoice_data).inserted_id  # Save to MongoDB
 
-    # Convertir a string todos los ObjectId en la respuesta
+    # Convert all ObjectId fields to string
     def serialize_mongo_data(data):
         if isinstance(data, ObjectId):
             return str(data)
@@ -39,6 +39,6 @@ def generar_factura(reserva_id):
         return data
 
     return serialize_mongo_data({
-        "factura_id": factura_id,
-        **factura_data
+        "invoice_id": invoice_id,
+        **invoice_data
     })
