@@ -1,18 +1,18 @@
 from flask import Blueprint, jsonify, request
-from app.services.soap_service import generar_factura
+from app.services.soap_service import generate_invoice
 
-invoice_bp = Blueprint("invoice", __name__)
+invoice_bp = Blueprint("invoice", __name__, url_prefix="/invoice")
 
-@invoice_bp.route("/soap/generar_factura", methods=["POST"])
-def generar_factura_endpoint():
-    """Endpoint para generar una factura."""
+@invoice_bp.route("/generate_invoice", methods=["POST"])
+def generate_invoice_endpoint():
+    """Endpoint to generate an invoice."""
     data = request.get_json()
-    reserva_id = data.get("reserva_id")
-    if not reserva_id:
-        return jsonify({"error": "Debe proporcionar el ID de la reserva"}), 400
+    reservation_id = data.get("reservation_id")
+    if not reservation_id:
+        return jsonify({"error": "Reservation ID is required"}), 400
 
     try:
-        response = generar_factura(reserva_id)
+        response = generate_invoice(reservation_id)
         return jsonify(response)
     except Exception as e:
         return jsonify({"error": str(e)}), 500

@@ -1,5 +1,5 @@
-from app.services.invoice_service import generar_factura
+from app.services.invoice_service import generate_invoice
 
-def procesar_factura(reserva_id):
-    """Punto de entrada para generar una factura."""
-    return generar_factura(reserva_id)
+def process_invoice(reservation_id):
+    """Entry point to generate an invoice."""
+    return generate_invoice(reservation_id)

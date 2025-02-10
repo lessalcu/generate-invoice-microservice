@@ -1,17 +1,19 @@
-# Base image
-FROM python:3.10-slim
+FROM python:3.9
 
-# Set working directory
 WORKDIR /app
 
-# Copy project files
-COPY . /app
-
-# Install dependencies
+# Copiar archivos necesarios
+COPY requirements.txt requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Expose port
-EXPOSE 5000
+# Copiar el resto de los archivos
+COPY . .
 
-# Run the application
-CMD ["python", "app.py"]
+# Definir la variable de entorno para Flask
+ENV FLASK_APP=app.py
+
+# Exponer el puerto
+EXPOSE 5005
+
+# Comando para ejecutar la aplicación
+CMD ["python", "/app/app.py"]
